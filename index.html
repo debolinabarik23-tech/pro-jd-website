@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💞 Forever Mode: Locked or Unlocked?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+
+<style>
+/* ---------------- GLOBAL ---------------- */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Playfair Display',serif;
+}
+
+p{
+  font-size:20px;
+  line-height:1.8;
+}
+
+body{
+overflow-x:hidden;
+overflow-y:auto;
+background:linear-gradient(135deg,#ffe4ec,#ffc2d1,#ffb3c6);
+color:#6a0d2f;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+text-align:center;
+transition:background 1s ease;
+}
+
+.screen{
+position:absolute;
+width:100%;
+min-height:100vh;
+overflow-y:auto;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+padding:20px;
+animation:fadeIn 1s forwards;
+}
+
+.active{
+display:flex;
+}
+
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
+}
+
+h1,h2{
+  margin-bottom:20px;
+  font-family:'Great Vibes',cursive;
+  font-size:42px;
+  letter-spacing:1px;
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:#ff4d6d;
+color:white;
+font-size:17px;
+font-weight:600;
+cursor:pointer;
+margin:10px;
+box-shadow:0 0 15px #ff4d6d;
+transition:0.3s;
+}
+
+
+button:hover{
+transform:scale(1.1);
+box-shadow:0 0 25px #fff;
+}
+
+.glow{
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{box-shadow:0 0 10px #fff;}
+to{box-shadow:0 0 25px #ff4d6d;}
+}
+
+/* Floating Hearts */
+.heart{
+position:absolute;
+color:pink;
+font-size:20px;
+animation:floatUp 6s linear infinite;
+}
+
+@keyframes floatUp{
+0%{transform:translateY(100vh) scale(0.5);opacity:0;}
+50%{opacity:1;}
+100%{transform:translateY(-10vh) scale(1.2);opacity:0;}
+}
+
+/* Falling Petals */
+.petal{
+position:absolute;
+color:#ffccd5;
+animation:fall 8s linear infinite;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10vh) rotate(0deg);}
+100%{transform:translateY(110vh) rotate(360deg);}
+}
+
+/* Loading Bar */
+.loading{
+width:80%;
+height:15px;
+background:#fff2;
+border-radius:20px;
+overflow:hidden;
+margin:20px;
+}
+
+.loading span{
+display:block;
+height:100%;
+width:0;
+background:#00ff99;
+animation:load 3s forwards;
+}
+
+@keyframes load{
+to{width:100%;}
+}
+
+/* Envelope */
+.envelope{
+width:200px;
+height:120px;
+background:#fff;
+position:relative;
+cursor:pointer;
+border-radius:5px;
+}
+
+.envelope:before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#ffccd5;
+clip-path:polygon(0 0,100% 0,50% 50%);
+transition:0.6s;
+}
+
+.envelope.open:before{
+transform:rotateX(180deg);
+}
+
+/* Heart Game */
+#gameHeart{
+  font-size:75px;
+  animation:beat 1s infinite;
+  z-index:2;
+}
+
+@keyframes beat{
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.2);}
+}
+
+.problem{
+position:absolute;
+background:#ff4d6d;
+padding:8px 12px;
+border-radius:20px;
+cursor:pointer;
+}
+
+/* Final Level */
+.final-bg{
+background:linear-gradient(135deg,#f3e8ff,#e0bbff,#d0a2f7);
+}
+
+.typing{
+font-size:18px;
+min-height:60px;
+}
+
+.propose-title{
+  font-family:'Great Vibes',cursive;
+  font-size:55px;
+  color:#b3005e;
+  text-shadow:0 0 20px #ff99cc;
+  margin-bottom:10px;
+  animation:glowText 2s infinite alternate;
+}
+
+@keyframes glowText{
+  from{ text-shadow:0 0 10px #ff99cc; }
+  to{ text-shadow:0 0 30px #ff4d6d; }
+}
+
+.love-message{
+  max-width:600px;
+  margin-top:25px;
+  font-size:20px;
+  line-height:1.8;
+  color:#6a0d2f;
+  background:rgba(255,255,255,0.3);
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 0 20px rgba(255,77,109,0.4);
+  backdrop-filter:blur(8px);
+}
+
+.badges{
+  margin:25px 0;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  align-items:center;
+}
+
+.badge{
+  background:rgba(255,255,255,0.3);
+  padding:12px 25px;
+  border-radius:30px;
+  font-size:18px;
+  font-weight:600;
+  color:#6a0d2f;
+  box-shadow:0 0 15px rgba(255,77,109,0.4);
+  backdrop-filter:blur(6px);
+  animation:badgePop 1s ease forwards;
+  opacity:0;
+}
+
+.badge:nth-child(1){ animation-delay:0.3s; }
+.badge:nth-child(2){ animation-delay:0.8s; }
+.badge:nth-child(3){ animation-delay:1.3s; }
+.badge:nth-child(4){ animation-delay:1.8s; }
+
+@keyframes badgePop{
+  from{
+    transform:scale(0.5);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.letter{
+  max-width:600px;
+  margin-top:20px;
+  background:rgba(255,255,255,0.4);
+  padding:0 25px;
+  border-radius:20px;
+  box-shadow:0 0 20px rgba(255,77,109,0.4);
+  backdrop-filter:blur(8px);
+  overflow:hidden;
+
+  max-height:0;
+  opacity:0;
+  transform:scale(0.95);
+  transition:max-height 1s ease, opacity 1s ease, padding 0.8s ease, transform 0.8s ease;
+}
+
+.letter.show{
+  max-height:800px;
+  padding:25px;
+  opacity:1;
+  transform:scale(1);
+}
+
+#healthBar{
+  position:absolute;
+  top:20px;
+  left:20px;
+  font-size:24px;
+}
+
+.stability-container{
+  width:70%;
+  height:15px;
+  background:#fff3;
+  border-radius:20px;
+  margin:20px auto;
+  overflow:hidden;
+}
+
+#stabilityFill{
+  width:0%;
+  height:100%;
+  background:#00ff99;
+  transition:width 0.3s ease;
+}
+
+#heartContainer{
+  position:relative;
+  width:150px;
+  height:150px;
+  margin:60px auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+
+
+#shield{
+  position:absolute;
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  border:5px solid rgba(255,255,255,0.8);
+  box-shadow:0 0 25px #00ff99;
+}
+
+
+
+@keyframes pulseShield{
+  0%{ box-shadow:0 0 10px #fff; }
+  100%{ box-shadow:0 0 30px #00ff99; }
+}
+
+#comboText{
+  margin-top:15px;
+  font-weight:bold;
+  color:#ff4d6d;
+}
+
+/* -------- GLASS HEART FILL -------- */
+
+#glassHeartWrapper{
+  margin:40px 0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+#glassHeart{
+  width:200px;
+  height:180px;
+  position:relative;
+  clip-path: path("M100,170 C20,120 0,70 50,40 C75,25 100,50 100,50 C100,50 125,25 150,40 C200,70 180,120 100,170 Z");
+  border:3px solid rgba(255,255,255,0.7);
+  overflow:hidden;
+  backdrop-filter: blur(4px);
+}
+
+#heartLiquid{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:0%;
+  background:linear-gradient(to top,#ff4d6d,#ff99cc);
+  transition:height 1.8s ease;
+  opacity:0.9;
+}
+
+#heartText{
+  font-size:20px;
+  margin-top:20px;
+  min-height:60px;
+  opacity:0;
+  transition:opacity 1s ease;
+}
+
+.love-note{
+  font-size:16px;
+  line-height:1.6;
+}
+
+
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" autoplay loop>
+  <source src="romantic-song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- INTRO SCREEN -->
+<div class="screen active" id="intro">
+  <h1>Are You Ready For Something Sweet?💖✨</h1>
+  <button onclick="startAdventure()">Yes 💖</button>
+  <button onclick="notReady()">No 🙈</button>
+</div>
+
+<!-- LEVEL 1 -->
+<div class="screen" id="level1">
+<h1>System Checking… What will you do in this situation? 💚</h1>
+<div class="loading"><span></span></div>
+<div id="questions"></div>
+</div>
+
+<!-- RESULT -->
+<!-- RESULT -->
+<div class="screen" id="result">
+<h2>Analysis Result: You are the most perfect Boyfriend in the World. 💚</h2>
+
+<div class="badges">
+  <div class="badge">🏅 My Emotional Safe Place</div>
+  <div class="badge">🏅 My Calm in Chaos</div>
+  <div class="badge">🏅 My Forever Team Partner</div>
+  <div class="badge">🏅 My Always Person</div>
+</div>
+
+<button onclick="showLevel('level2intro')">Proceed to Level 2 💘</button>
+</div>
+
+
+<!-- LEVEL 2 INTRO -->
+<div class="screen" id="level2intro">
+<h2>How to Protect Our Heart 💖</h2>
+<p>Little problems will try to hit the heart.<br>Click them before they reach it.</p>
+<button onclick="startGame()">I'll Protect Us 🛡️</button>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="level2">
+
+  <!-- Health Bar -->
+  <div id="healthBar">❤️ ❤️ ❤️ ❤️ ❤️</div>
+
+  <!-- Stability Progress -->
+  <div class="stability-container">
+    <div id="stabilityFill"></div>
+  </div>
+  <p id="stabilityText">Relationship Stability: 0%</p>
+
+  <!-- Shielded Heart -->
+  <div id="heartContainer">
+    <div id="shield"></div>
+    <div id="gameHeart">❤️</div>
+  </div>
+
+  <!-- Combo Text -->
+  <div id="comboText"></div>
+
+</div>
+
+
+<!-- ENVELOPE -->
+<div class="screen" id="envelopeScreen">
+<h2>Thank you for protecting my heart love❤️.You’ve unlocked something special… ✨</h2>
+<div class="envelope" onclick="openEnvelope()"></div>
+<div id="letter" class="letter">
+<p class="love-note">
+My love, my Kuchu💖<br><br>
+
+I just need you to know this — I love you so deeply, so honestly, so completely. 💞<br>
+You are my safe place, my peace, my home. 🏡<br>
+When the world feels heavy, you make it lighter. 🌸<br>
+When I overthink, you stay. 🤍<br>
+You are my greatest gift, my calm in chaos. ✨<br>
+Thank you for loving me. Thank you for being mine. 🥺💞<br>
+Always you. Always me. Always us. 🤍✨
+</p>
+
+<button onclick="showLevel('level3')">Continue to Level 3 💞</button>
+</div>
+</div>
+
+<!-- LEVEL 3 -->
+<div class="screen" id="level3">
+<h2>Choose our love story 💖</h2>
+<button onclick="wrongChoice()">Temporary Chapter</button>
+<button onclick="wrongChoice()">Just For Now</button>
+<button onclick="wrongChoice()">Not Interested</button>
+<button onclick="correctChoice()">Forever Adventure 💍</button>
+</div>
+
+<!-- WARNING -->
+<div class="screen" id="warning">
+<h2>Warning ⚠️</h2>
+<p>Increased heartbeats<br>Sudden smiling<br>Unexpected emotional damage</p>
+<button onclick="showLevel('final')">I’m Brave 💥</button>
+</div>
+
+<!-- FINAL -->
+<div class="screen final-bg" id="final">
+<div class="typing" id="typingText"></div>
+<button onclick="stay()">Stay 💖</button>
+<button id="runBtn" onclick="runAway()">Run Away 😏</button>
+</div>
+
+<script>
+
+/* ---------------- INTRO ---------------- */
+
+function startAdventure(){
+  const music = document.getElementById("bgMusic");
+  music.volume = 0.3;
+  music.play();
+
+  showLevel('level1');
+}
+
+function notReady(){
+  alert("Hmm… I think you are ready. Try again 😏💘");
+}
+
+
+/* ---------------- NAVIGATION ---------------- */
+function showLevel(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  // 🎉 Mini Celebration when Result Screen Appears
+  if(id === "result"){
+    for(let i=0;i<15;i++){
+      setTimeout(()=>{
+        let heart=document.createElement("div");
+        heart.className="heart";
+        heart.innerText="💚";
+        heart.style.left=Math.random()*100+"%";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),4000);
+      },i*150);
+    }
+  }
+
+if(id === "final"){
+    document.getElementById('typingText').innerHTML = "";
+    i = 0;
+    typeEffect();
+  }
+}
+
+/* ---------------- LEVEL 1 QUESTIONS ---------------- */
+let questions = [
+  "When I’m not at my best, you?",
+  "If I fall apart sometimes, you?",
+  "If the whole world feels heavy to me, you?",
+  "If loving me gets complicated, you?"
+];
+
+let answers = [
+  ["Wait for better days", "Point out flaws", "Stay anyway 🤍"],
+  ["Step back", "Get tired", "Help me rebuild gently 💞"],
+  ["Get defensive", "Avoid the topic", "Remind me we’re a team ✨"],
+  ["Tell me to handle it", "Distract yourself", "Hold my hand and stay 💖"]
+];
+
+
+let qIndex=0;
+
+function showQuestion(){
+if(qIndex>=questions.length){
+showLevel('result');
+return;
+}
+let container=document.getElementById('questions');
+container.innerHTML="<h2>"+questions[qIndex]+"</h2>";
+answers[qIndex].forEach(ans=>{
+let btn=document.createElement("button");
+btn.innerText=ans;
+btn.onclick=()=>{qIndex++;showQuestion();}
+container.appendChild(btn);
+});
+}
+setTimeout(showQuestion,3000);
+
+/* ---------------- GAME UPGRADED SYSTEM ---------------- */
+
+let gameInterval;
+let health = 5;
+let stability = 0;
+let combo = 0;
+let phase = 1;
+let bossHealth = 5;
+
+function startGame(){
+  showLevel('level2');
+
+  health = 5;
+  stability = 0;
+  combo = 0;
+  phase = 1;
+  bossHealth = 5;
+
+  updateHealth();
+  updateStability();
+
+  gameInterval = setInterval(spawnProblem,1500);
+}
+
+function spawnProblem(){
+
+  let wordsPhase1=["Bad Mood","Misunderstanding"];
+  let wordsPhase2=["Ego","Distance"];
+  let bossWord=["👹 Overthinking"];
+
+  if(stability >= 40) phase = 2;
+  if(stability >= 80) phase = 3;
+
+  let word;
+
+  if(phase === 1) word = wordsPhase1[Math.floor(Math.random()*wordsPhase1.length)];
+  else if(phase === 2) word = wordsPhase2[Math.floor(Math.random()*wordsPhase2.length)];
+  else word = bossWord[0];
+
+  let div=document.createElement("div");
+  div.className="problem";
+  div.innerText=word;
+if(Math.random() < 0.1){
+  div.innerText="✨ Hug Power-Up";
+  word="Hug";
+}
+
+  div.style.top=Math.random()*70+"%";
+  div.style.left="0%";
+
+  document.getElementById('level2').appendChild(div);
+
+  let move = setInterval(()=>{
+    div.style.left = (div.offsetLeft + 5) + "px";
+
+    if(div.offsetLeft > window.innerWidth-100){
+      missProblem(div);
+      clearInterval(move);
+    }
+  },50);
+
+  div.onclick=()=>{
+    clearInterval(move);
+    handleClick(div,word);
+  };
+}
+
+function handleClick(div,word){
+if(word.includes("Hug")){
+  stability+=15;
+  updateStability();
+  div.remove();
+  alert("Sometimes all I need is a hug from you 💞");
+  return;
+}
+
+  if(word.includes("Overthinking")){
+    bossHealth--;
+    if(bossHealth <=0){
+      clearInterval(gameInterval);
+      stability = 100;
+      updateStability();
+      setTimeout(()=>{
+        alert("Communication Wins ❤️");
+        emotionalEnding();
+      },500);
+    }
+  }else{
+    stability +=10;
+    combo++;
+    updateStability();
+    div.remove();
+    checkCombo();
+  }
+}
+
+function missProblem(div){
+  div.remove();
+  health--;
+  combo=0;
+  updateHealth();
+
+  document.getElementById("gameHeart").style.transform="scale(1.4)";
+  setTimeout(()=>{
+    document.getElementById("gameHeart").style.transform="scale(1)";
+  },200);
+
+  if(health<=0){
+    clearInterval(gameInterval);
+    alert("Love needs effort. Try Again?");
+    showLevel('level2intro');
+  }
+}
+
+function updateHealth(){
+  document.getElementById("healthBar").innerText =
+    "❤️ ".repeat(health);
+}
+
+function updateStability(){
+  document.getElementById("stabilityFill").style.width = stability + "%";
+  document.getElementById("stabilityText").innerText =
+    "Relationship Stability: " + stability + "%";
+}
+
+function checkCombo(){
+  if(combo>=3){
+    document.getElementById("comboText").innerText =
+      "🔥 Healthy Communication Combo!";
+    stability+=5;
+    combo=0;
+  }
+}
+
+function emotionalEnding(){
+  showLevel('envelopeScreen');
+
+  setTimeout(()=>{
+    alert("You protected my heart in a game…\nI promise to protect your heart forever in every situation ♾️❤️");
+  },1000);
+}
+
+
+
+
+
+/* ---------------- ENVELOPE ---------------- */
+function openEnvelope(){
+  document.querySelector('.envelope').classList.add('open');
+
+  const letter = document.getElementById('letter');
+  setTimeout(()=>{
+    letter.classList.add('show');
+  },500); // small delay for realism
+}
+
+/* ---------------- LEVEL 3 ---------------- */
+function wrongChoice(){
+alert("⚠️ Incorrect Choice. Forever Mode requires Forever Adventure.");
+}
+
+function correctChoice(){
+showLevel('warning');
+}
+
+/* ---------------- FINAL ---------------- */
+let text="I don’t want a big promise.\nI don’t want to pressure you.\nI just want you.\n\nNot just for today.\nNot just for this phase.\nBut for all the days we haven’t seen yet. \nWill you stay with me till the end?🥺";
+let i=0;
+
+function typeEffect(){
+if(i<text.length){
+document.getElementById('typingText').innerHTML+=text.charAt(i);
+i++;
+setTimeout(typeEffect,40);
+}
+}
+
+function runAway(){
+alert("😢 That made my heart a little sad... Think again?");
+setTimeout(()=>{
+showLevel('final');
+},1000);
+}
+function stay(){
+  startHeartFill();
+
+  for(let i=0;i<20;i++){
+    setTimeout(()=>{
+      let heart=document.createElement("div");
+      heart.className="heart";
+      heart.innerText="💖";
+      heart.style.left=Math.random()*100+"%";
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),4000);
+    },i*100);
+  }
+}
+
+
+
+/* Floating hearts */
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerText="💖";
+heart.style.left=Math.random()*100+"%";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+},800);
+
+/* Falling petals */
+setInterval(()=>{
+let petal=document.createElement("div");
+petal.className="petal";
+petal.innerText="🌹";
+petal.style.left=Math.random()*100+"%";
+document.body.appendChild(petal);
+setTimeout(()=>petal.remove(),8000);
+},1500);
+
+/* -------- HEART FILL SEQUENCE -------- */
+
+const heartMessages = [
+  "You stayed during my bad moods.",
+  "You listened whenever I overthought.",
+  "You made me laugh even when I didn’t want to.",
+  "You didn’t leave during misunderstandings.",
+  "You chose me when ego was easier.",
+  "You were with me even in my hardest times.",
+  "When nobody supported me… I always had you."
+];
+
+let heartIndex = 0;
+
+function startHeartFill(){
+
+  showLevel('heartFillScreen');
+
+  const textDiv = document.getElementById("heartText");
+  const liquid = document.getElementById("heartLiquid");
+
+  heartIndex = 0;
+  liquid.style.height = "0%";
+
+  function showNext(){
+
+    if(heartIndex < heartMessages.length){
+
+      textDiv.style.opacity = 0;
+
+      setTimeout(()=>{
+        textDiv.innerText = heartMessages[heartIndex];
+        textDiv.style.opacity = 1;
+
+        let fillAmount = ((heartIndex+1) / heartMessages.length) * 100;
+        liquid.style.height = fillAmount + "%";
+
+        heartIndex++;
+        setTimeout(showNext, 2500);
+
+      },500);
+
+    } else {
+
+      setTimeout(()=>{
+        textDiv.style.opacity = 0;
+
+        setTimeout(()=>{
+          textDiv.innerHTML = `
+          <strong>This is how you filled my heart.</strong><br>
+          Not with big promises.<br>
+          But with staying.<br><br>
+          <em>And you still do.</em>
+          `;
+          textDiv.style.opacity = 1;
+
+          setTimeout(()=>{
+            showLevel('thankyou');
+          },6000);
+
+        },800);
+
+      },1000);
+
+    }
+  }
+
+  showNext();
+}
+
+
+</script>
+
+<!-- HEART FILL SCREEN -->
+<div class="screen final-bg" id="heartFillScreen">
+
+  <h2>You never noticed…<br>but every time you chose me…</h2>
+
+  <div id="glassHeartWrapper">
+    <div id="glassHeart">
+      <div id="heartLiquid"></div>
+    </div>
+  </div>
+
+  <div id="heartText"></div>
+
+</div>
+
+
+<!-- THANK YOU SCREEN -->
+<div class="screen final-bg" id="thankyou">
+<h1 class="propose-title">Happy Propose Day, My Love 💍💖</h1>
+<h2>Thank You For Choosing Me 💜</h2>
+
+<p class="love-message">
+You didn’t just click “Stay”… 💞  
+You chose *me*.  
+
+And that makes me the luckiest girl alive. 🥹✨  
+
+You are my comfort on hard days,  
+my smile in random moments,  
+my peace in chaos,  
+and my favorite person in this whole world. 🌍❤️  
+
+I don’t need perfect.  
+I don’t need fairy tales.  
+I just need you — exactly the way you are.  
+
+Thank you for loving me.  
+Thank you for protecting us.  
+Thank you for choosing me. 💍  
+
+I am so unbelievably lucky to have you. 💖  
+Happy Propose Day, my love. 🌹✨  
+Forever begins with us. I love you so much❤️.
+</p>
+
+
+<button onclick="showLevel('level1')">Start Again 💕</button>
+</div>
+
+</body>
+</html>
